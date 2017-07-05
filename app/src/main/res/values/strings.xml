@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">TCS1G</string>
+    <string name="power_on">上电</string>
+    <string name="power_off">下电</string>
+    <string name="main_board">主板</string>
+    <string name="expand">外部扩展</string>
 </resources>
