@@ -51,9 +51,9 @@ public class OnOffActivity extends AppCompatActivity implements CompoundButton.O
     }
 
     private void initView() {
-        mTbMain = findViewById(R.id.tb_main);
+        mTbMain = (ToggleButton) findViewById(R.id.tb_main);
         mTbMain.setOnCheckedChangeListener(this);
-        ToggleButton mTbExpand = findViewById(R.id.tb_expand);
+        ToggleButton mTbExpand = (ToggleButton) findViewById(R.id.tb_expand);
         mTbExpand.setOnCheckedChangeListener(this);
         try {
             mMainControl = new GpioControl(GpioControl.MAIN_GPIO);

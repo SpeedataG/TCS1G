@@ -1,7 +1,5 @@
 package win.reginer.gpio;
 
-import android.support.annotation.NonNull;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -42,7 +40,7 @@ public class GpioControl {
      *
      * @param path gpio路径
      */
-    public GpioControl(@NonNull String path) throws IOException {
+    public GpioControl( String path) throws IOException {
         File gpioFile = new File(path);
         mControlFile = new BufferedWriter(new FileWriter(gpioFile, false));
     }

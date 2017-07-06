@@ -4,4 +4,5 @@
     <string name="power_off">下电</string>
     <string name="main_board">主板</string>
     <string name="expand">外部扩展</string>
+    <string name="finger">指纹</string>
 </resources>

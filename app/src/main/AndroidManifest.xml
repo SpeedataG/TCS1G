@@ -20,6 +20,8 @@
         </activity>
         <activity android:name=".OnOffActivity">
         </activity>
+        <activity android:name=".FingerActivity">
+        </activity>
     </application>
 
 </manifest>
