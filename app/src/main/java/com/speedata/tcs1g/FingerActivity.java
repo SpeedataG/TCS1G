@@ -1,7 +1,9 @@
 package com.speedata.tcs1g;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.IOException;
@@ -33,10 +35,11 @@ import win.reginer.gpio.GpioControl;
  *         联系方式:QQ:282921012
  *         功能描述:指纹界面
  */
-public class FingerActivity extends AppCompatActivity  {
+public class FingerActivity extends AppCompatActivity implements FingerInter {
     private GpioControl mMainControl;
     private ImageView mImgFinger;
     private static final String TAG = "Reginer";
+    private Realize mRealize;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +51,7 @@ public class FingerActivity extends AppCompatActivity  {
     }
 
     private void initRealize() {
-        Realize mRealize = new Realize(this);
+        mRealize = new Realize(this, this);
         mRealize.initReader();
     }
 
@@ -68,10 +71,29 @@ public class FingerActivity extends AppCompatActivity  {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mMainControl.powerOffDevice(63, 128);
+        mRealize.stopRead();
+//        mMainControl.powerOffDevice(63, 128);
     }
+
     private void initView() {
         mImgFinger = (ImageView) findViewById(R.id.img_finger);
     }
 
+    @Override
+    public void onBackPressed() {
+        mRealize.stopRead();
+        super.onBackPressed();
+    }
+
+    @Override
+    public void complete(final Bitmap bitmap, String content) {
+//        mImgFinger.setImageBitmap(bitmap);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mImgFinger.setImageBitmap(bitmap);
+            }
+        });
+        Log.d(TAG, "complete: 000000000000000000000000" + bitmap.getHeight());
+    }
 }

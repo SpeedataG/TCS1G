@@ -5,7 +5,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbManager;
 import android.text.TextUtils;
@@ -44,7 +43,7 @@ import com.digitalpersona.uareu.dpfpddusbhost.DPFPDDUsbHost;
  *         联系方式:QQ:282921012
  *         功能描述:
  */
-public class Realize implements IFingerRealize, FingerInter {
+public class Realize implements IFingerRealize {
 
     private static final String ACTION_USB_PERMISSION = "com.digitalpersona.uareu.dpfpddusbhost.USB_PERMISSION";
     private Context mContext;
@@ -53,12 +52,14 @@ public class Realize implements IFingerRealize, FingerInter {
     private int mDPI;
     private String deviceName = null;
     private Engine mEngine = null;
+    private FingerInter fingerInter;
 
     private static final String TAG = "Reginer";
 
 
-    public Realize(Context context) {
+    public Realize(Context context, FingerInter inter) {
         mContext = context;
+        fingerInter = inter;
     }
 
     @Override
@@ -97,7 +98,7 @@ public class Realize implements IFingerRealize, FingerInter {
     @Override
     public void startRead() {
         Log.d(TAG, "startRead: 11111111111111111111111111");
-        mThread = new ReadThread(mReader, mDPI, this);
+        mThread = new ReadThread(mReader, mDPI, fingerInter);
         mThread.start();
     }
 
@@ -112,18 +113,26 @@ public class Realize implements IFingerRealize, FingerInter {
             startRead();
         } catch (Exception e) {
             Log.d(TAG, "error during init of reader");
+            stopRead();
         }
     }
 
     @Override
     public void stopRead() {
-        mThread.setContinue(false);
+        try {
+            mThread.setContinue(false);
+            mReader.CancelCapture();
+            mReader.Close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
     private void displayReaderNotFound() {
         //没上电
         Log.d(TAG, "displayReaderNotFound: 000000000000000000000000");
+        stopRead();
     }
 
     private final BroadcastReceiver mUsbReceiver = new BroadcastReceiver() {
@@ -144,8 +153,4 @@ public class Realize implements IFingerRealize, FingerInter {
         }
     };
 
-    @Override
-    public void complete(Bitmap bitmap, String content) {
-        Log.d(TAG, "complete: 11111111111111111111111111111");
-    }
 }
